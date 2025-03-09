@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+
+    <table class='table table-striped'>
+        <thead>
+            <td scope='col'>Symbol</td>
+            <td scope='col'>Share</td>
+            <td scope='col'>Price</td>
+            <td scope='col'>Transacted</td>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] | usd }}</td>
+                <td>{{ row[4] }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+{% endblock %}

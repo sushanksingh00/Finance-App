@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+
+    <p style="text-align: left">USER - {{ user }}</p>
+    <hr>
+    <table class='table table-striped'>
+        <thead class='thead-dark'>
+            <td scope='col' class='font-weight-bold'>Symbol</td>
+            <td scope='col' class='font-weight-bold'>Share</td>
+            <td scope='col' class='font-weight-bold'>Price</td>
+            <td scope='col' class='font-weight-bold'>Total</td>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[2] | usd}}</td>
+                <td>{{ row[3] | usd}}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td class='font-weight-bold'>Cash</td>
+                <td>{{ cash | usd }}</td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td class='font-weight-bold'>TOTAL</td>
+                <td>{{ total | usd}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+
+{% endblock %}
