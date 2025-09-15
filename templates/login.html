@@ -1,17 +1,46 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+    Sign In
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="fas fa-sign-in-alt fa-2x mb-2"></i>
+                    <h4>Welcome Back</h4>
+                    <p class="mb-0 text-light">Sign in to your account</p>
+                </div>
+                <div class="card-body">
+                    <form action="/login" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-2"></i>Username
+                            </label>
+                            <input autocomplete="off" autofocus class="form-control" id="username" name="username" placeholder="Enter your username" type="text" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input class="form-control" id="password" name="password" placeholder="Enter your password" type="password" required>
+                        </div>
+                        <button class="btn btn-primary w-100 mb-3" type="submit">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+                    </form>
+                    <div class="text-center">
+                        <p class="text-muted mb-0">Don't have an account?</p>
+                        <a href="/register" class="text-decoration-none">
+                            <i class="fas fa-user-plus me-1"></i>Create Account
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
+    </div>
+</div>
 {% endblock %}

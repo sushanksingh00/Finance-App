@@ -1,14 +1,61 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Quote
+    Stock Quote
 {% endblock %}
 
 {% block main %}
-    <form action="/quote" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="symbol" placeholder="Symbol" type="text">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="fas fa-search fa-2x mb-2"></i>
+                    <h4>Get Stock Quote</h4>
+                    <p class="mb-0 text-light">Check current stock prices</p>
+                </div>
+                <div class="card-body">
+                    <form action="/quote" method="post">
+                        <div class="mb-4">
+                            <label for="symbol" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Stock Symbol
+                            </label>
+                            <input autocomplete="off" autofocus class="form-control text-uppercase" id="symbol" name="symbol" placeholder="Enter stock symbol (e.g., AAPL, GOOGL, TSLA)" type="text" required>
+                            <div class="form-text">Enter any valid stock ticker symbol to get the current price</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-search me-2"></i>Get Quote
+                            </button>
+                            <a href="/" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Portfolio
+                            </a>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="mb-2">
+                            <i class="fas fa-info-circle me-2 text-info"></i>Popular Stocks
+                        </h6>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <span class="badge bg-secondary">AAPL</span><br>
+                                <small class="text-muted">Apple Inc.</small>
+                            </div>
+                            <div class="col-4">
+                                <span class="badge bg-secondary">GOOGL</span><br>
+                                <small class="text-muted">Alphabet Inc.</small>
+                            </div>
+                            <div class="col-4">
+                                <span class="badge bg-secondary">TSLA</span><br>
+                                <small class="text-muted">Tesla Inc.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </form>
+    </div>
+</div>
 {% endblock %}

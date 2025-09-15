@@ -1,12 +1,41 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Apology
+    Error
 {% endblock %}
 
 {% block main %}
-    <!-- https://memegen.link/ -->
-    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
-    <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/CsCgN7Ll.png&width=400" title="{{ top }}">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header text-center bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <h4>Oops! Something went wrong</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <h1 class="display-1 text-danger">{{ top }}</h1>
+                        <h5 class="text-muted mb-3">{{ bottom }}</h5>
+                    </div>
+                    
+                    <div class="alert alert-danger mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Please check your input and try again.
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-block">
+                        <a href="javascript:history.back()" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>Go Back
+                        </a>
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
