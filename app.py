@@ -1,5 +1,5 @@
 import os
-
+#it is real
 import sqlite3
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -317,8 +317,6 @@ def update_money(total_price):
     return
 
 
-
-
 def update_history(symbol, qty, price):
 
     db.execute("""INSERT INTO history
@@ -330,4 +328,4 @@ def update_history(symbol, qty, price):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
