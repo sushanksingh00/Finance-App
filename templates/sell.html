@@ -1,78 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Sell Stocks
+    Sell
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
-                    <h4>Sell Stocks</h4>
-                    <p class="mb-0 text-light">Sell shares from your portfolio</p>
-                </div>
-                <div class="card-body">
-                    {% if stocks %}
-                    <form action="/sell" method="post">
-                        <div class="mb-4">
-                            <label for="symbol" class="form-label">
-                                <i class="fas fa-tag me-2"></i>Select Stock
-                            </label>
-                            <select name='symbol' id="symbol" class="form-select" required>
-                                <option value="">Choose stock to sell...</option>
-                                {% for stock in stocks %}
-                                    <option value="{{stock[0]}}">{{stock[0]}} ({{ stock[1] }} shares available)</option>
-                                {% endfor %}
-                            </select>
-                            <div class="form-text">Select the stock you want to sell from your portfolio</div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="shares" class="form-label">
-                                <i class="fas fa-layer-group me-2"></i>Number of Shares
-                            </label>
-                            <input autocomplete="off" class="form-control" id="shares" name="shares" placeholder="Enter quantity to sell" type="number" min="1" required>
-                            <div class="form-text">Specify how many shares you want to sell</div>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-warning btn-lg" type="submit">
-                                <i class="fas fa-money-bill-wave me-2"></i>Sell Shares
-                            </button>
-                            <a href="/" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Back to Portfolio
-                            </a>
-                        </div>
-                    </form>
-                    {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">No Stocks to Sell</h5>
-                        <p class="text-muted mb-4">You don't have any stocks in your portfolio yet.</p>
-                        <a href="/buy" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart me-2"></i>Buy Some Stocks
-                        </a>
-                    </div>
-                    {% endif %}
-                    
-                    {% if stocks %}
-                    <div class="mt-4 p-3 bg-light rounded">
-                        <h6 class="mb-2">
-                            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Important Notes
-                        </h6>
-                        <ul class="mb-0 small text-muted">
-                            <li>Sales are executed at current market prices</li>
-                            <li>You can only sell shares you currently own</li>
-                            <li>Proceeds will be added to your available cash</li>
-                        </ul>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+    <form action="/sell" method="post">
+        <div class="mb-3">
+            <select name='symbol' >
+                {% for stock in stocks %}
+                    <option>{{stock[0]}}</option>
+                {% endfor %}
+            </select>
         </div>
-    </div>
-</div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="shares" placeholder="Qty" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </form>
 {% endblock %}

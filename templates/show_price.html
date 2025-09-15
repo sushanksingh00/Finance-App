@@ -1,46 +1,14 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Stock Quote - {{ symbol }}
+    Quote
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <i class="fas fa-chart-line fa-2x mb-2"></i>
-                    <h4>Stock Quote Result</h4>
-                </div>
-                <div class="card-body text-center">
-                    <div class="mb-4">
-                        <h2 class="text-gradient mb-3">{{ symbol }}</h2>
-                        <div class="stats-card d-inline-block">
-                            <div class="stats-value">{{ price | usd }}</div>
-                            <div class="stats-label">Current Price</div>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert-info mb-4">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>{{ symbol }}</strong> is currently trading at <strong>{{ price | usd }}</strong> per share
-                    </div>
-                    
-                    <div class="d-grid gap-2 d-md-block">
-                        <a href="/buy" class="btn btn-success me-2">
-                            <i class="fas fa-shopping-cart me-2"></i>Buy This Stock
-                        </a>
-                        <a href="/quote" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-search me-2"></i>Get Another Quote
-                        </a>
-                        <a href="/" class="btn btn-outline-secondary">
-                            <i class="fas fa-home me-2"></i>Back to Portfolio
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <form action="/quote">
+        <div class="mb-3">
+            <p>A share of {{ symbol }} is costs {{ price | usd }}</p>
         </div>
-    </div>
-</div>
+        <button class="btn btn-primary" type="submit">OK</button>
+    </form>
 {% endblock %}
