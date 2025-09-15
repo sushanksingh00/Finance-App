@@ -1,30 +1,85 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Homepage
+    Transaction History
 {% endblock %}
 
 {% block main %}
-
-    <table class='table table-striped'>
-        <thead>
-            <td scope='col'>Symbol</td>
-            <td scope='col'>Share</td>
-            <td scope='col'>Price</td>
-            <td scope='col'>Transacted</td>
-        </thead>
-        <tbody>
-        {% for row in rows %}
-            <tr>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] | usd }}</td>
-                <td>{{ row[4] }}</td>
-            </tr>
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Transaction History
+                    </h4>
+                    <p class="text-light mb-0">Your complete trading history</p>
+                </div>
+                <div class="card-body p-0">
+                    {% if rows %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-tag me-1"></i>Symbol</th>
+                                    <th><i class="fas fa-layer-group me-1"></i>Shares</th>
+                                    <th><i class="fas fa-dollar-sign me-1"></i>Price per Share</th>
+                                    <th><i class="fas fa-clock me-1"></i>Transaction Date</th>
+                                    <th><i class="fas fa-exchange-alt me-1"></i>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in rows %}
+                                <tr class="slide-up">
+                                    <td>
+                                        <span class="badge bg-primary fs-6">{{ row[1] }}</span>
+                                    </td>
+                                    <td>
+                                        {% if row[2] > 0 %}
+                                            <span class="text-success fw-bold">+{{ row[2] }}</span>
+                                        {% else %}
+                                            <span class="text-danger fw-bold">{{ row[2] }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ row[3] | usd }}</td>
+                                    <td class="text-muted">{{ row[4] }}</td>
+                                    <td>
+                                        {% if row[2] > 0 %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-plus me-1"></i>BUY
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-minus me-1"></i>SELL
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Transaction History</h4>
+                        <p class="text-muted mb-4">You haven't made any trades yet.</p>
+                        <a href="/buy" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>Make Your First Trade
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if rows %}
+            <div class="text-center mt-4">
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Portfolio
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
