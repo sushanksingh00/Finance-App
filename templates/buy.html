@@ -1,60 +1,16 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Buy Stocks
+    Buy
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <i class="fas fa-shopping-cart fa-2x mb-2"></i>
-                    <h4>Buy Stocks</h4>
-                    <p class="mb-0 text-light">Purchase shares to grow your portfolio</p>
-                </div>
-                <div class="card-body">
-                    <form action="/buy" method="post">
-                        <div class="mb-4">
-                            <label for="symbol" class="form-label">
-                                <i class="fas fa-tag me-2"></i>Stock Symbol
-                            </label>
-                            <input autocomplete="off" autofocus class="form-control text-uppercase" id="symbol" name="symbol" placeholder="Enter stock symbol (e.g., AAPL, GOOGL)" type="text" required>
-                            <div class="form-text">Enter the stock ticker symbol you want to purchase</div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="shares" class="form-label">
-                                <i class="fas fa-layer-group me-2"></i>Number of Shares
-                            </label>
-                            <input autocomplete="off" class="form-control" id="shares" name="shares" placeholder="Enter quantity" type="number" min="1" required>
-                            <div class="form-text">Specify how many shares you want to buy</div>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success btn-lg" type="submit">
-                                <i class="fas fa-shopping-cart me-2"></i>Buy Shares
-                            </button>
-                            <a href="/" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Back to Portfolio
-                            </a>
-                        </div>
-                    </form>
-                    
-                    <div class="mt-4 p-3 bg-light rounded">
-                        <h6 class="mb-2">
-                            <i class="fas fa-lightbulb me-2 text-warning"></i>Trading Tips
-                        </h6>
-                        <ul class="mb-0 small text-muted">
-                            <li>Research the company before investing</li>
-                            <li>Consider diversifying your portfolio</li>
-                            <li>Only invest what you can afford to lose</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <form action="/buy" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="symbol" placeholder="Symbol" type="text">
+            <br>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="shares" placeholder="Qty" type="number">
         </div>
-    </div>
-</div>
+        <button class="btn btn-primary" type="submit">BUY</button>
+    </form>
 {% endblock %}

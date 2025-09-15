@@ -1,52 +1,20 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Create Account
+    Register
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-header text-center">
-                    <i class="fas fa-user-plus fa-2x mb-2"></i>
-                    <h4>Create Account</h4>
-                    <p class="mb-0 text-light">Join FinanceHub today</p>
-                </div>
-                <div class="card-body">
-                    <form action="/register" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">
-                                <i class="fas fa-user me-2"></i>Username
-                            </label>
-                            <input autocomplete="off" autofocus class="form-control" id="username" name="username" placeholder="Choose a username" type="text" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">
-                                <i class="fas fa-lock me-2"></i>Password
-                            </label>
-                            <input class="form-control" id="password" name="password" placeholder="Create a strong password" type="password" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="confirmation" class="form-label">
-                                <i class="fas fa-lock me-2"></i>Confirm Password
-                            </label>
-                            <input class="form-control" id="confirmation" name="confirmation" placeholder="Confirm your password" type="password" required>
-                        </div>
-                        <button class="btn btn-primary w-100 mb-3" type="submit">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
-                        </button>
-                    </form>
-                    <div class="text-center">
-                        <p class="text-muted mb-0">Already have an account?</p>
-                        <a href="/login" class="text-decoration-none">
-                            <i class="fas fa-sign-in-alt me-1"></i>Sign In
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <form action="/register" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
         </div>
-    </div>
-</div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Password(again)" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
 {% endblock %}

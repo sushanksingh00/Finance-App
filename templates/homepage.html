@@ -1,138 +1,44 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Portfolio Dashboard
+    Homepage
 {% endblock %}
 
 {% block main %}
 
-<div class="container">
-    <!-- Welcome Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="text-center">
-                <h1 class="display-4 text-gradient mb-2">Welcome back, {{ user }}!</h1>
-                <p class="lead text-muted">Track your investments and grow your portfolio</p>
-            </div>
-        </div>
-    </div>
+    <p style="text-align: left">USER - {{ user }}</p>
+    <hr>
+    <table class='table table-striped'>
+        <thead class='thead-dark'>
+            <td scope='col' class='font-weight-bold'>Symbol</td>
+            <td scope='col' class='font-weight-bold'>Share</td>
+            <td scope='col' class='font-weight-bold'>Price</td>
+            <td scope='col' class='font-weight-bold'>Total</td>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[2] | usd}}</td>
+                <td>{{ row[3] | usd}}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td class='font-weight-bold'>Cash</td>
+                <td>{{ cash | usd }}</td>
+            </tr>
 
-    <!-- Portfolio Summary Cards -->
-    <div class="row mb-5">
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-value">{{ cash | usd }}</div>
-                <div class="stats-label">
-                    <i class="fas fa-wallet me-1"></i>Available Cash
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-value">{{ total | usd }}</div>
-                <div class="stats-label">
-                    <i class="fas fa-chart-pie me-1"></i>Total Portfolio
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-value">{{ rows|length }}</div>
-                <div class="stats-label">
-                    <i class="fas fa-list me-1"></i>Active Positions
-                </div>
-            </div>
-        </div>
-    </div>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class='font-weight-bold'>TOTAL</td>
+                <td>{{ total | usd}}</td>
+            </tr>
+        </tbody>
 
-    <!-- Portfolio Holdings -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0">
-                        <i class="fas fa-briefcase me-2"></i>Your Portfolio Holdings
-                    </h4>
-                </div>
-                <div class="card-body p-0">
-                    {% if rows %}
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th><i class="fas fa-tag me-1"></i>Symbol</th>
-                                    <th><i class="fas fa-layer-group me-1"></i>Shares</th>
-                                    <th><i class="fas fa-dollar-sign me-1"></i>Price per Share</th>
-                                    <th><i class="fas fa-calculator me-1"></i>Total Value</th>
-                                    <th><i class="fas fa-chart-line me-1"></i>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in rows %}
-                                <tr class="slide-up">
-                                    <td>
-                                        <span class="badge bg-primary fs-6">{{ row[1] }}</span>
-                                    </td>
-                                    <td class="fw-bold">{{ row[4] }}</td>
-                                    <td>{{ row[2] | usd }}</td>
-                                    <td class="fw-bold text-success">{{ row[3] | usd }}</td>
-                                    <td>
-                                        <a href="/sell" class="btn btn-outline-danger btn-sm">
-                                            <i class="fas fa-minus me-1"></i>Sell
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                            <tfoot class="table-light">
-                                <tr>
-                                    <td colspan="3" class="text-end fw-bold">Available Cash:</td>
-                                    <td class="fw-bold text-info">{{ cash | usd }}</td>
-                                    <td></td>
-                                </tr>
-                                <tr class="table-success">
-                                    <td colspan="3" class="text-end fw-bold fs-5">TOTAL PORTFOLIO:</td>
-                                    <td class="fw-bold fs-5 text-success">{{ total | usd }}</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="text-center py-5">
-                        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No Holdings Yet</h4>
-                        <p class="text-muted mb-4">Start building your portfolio by purchasing some stocks!</p>
-                        <a href="/buy" class="btn btn-primary btn-lg">
-                            <i class="fas fa-plus me-2"></i>Make Your First Purchase
-                        </a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="text-center">
-                <h5 class="mb-3">Quick Actions</h5>
-                <a href="/quote" class="btn btn-outline-primary me-2 mb-2">
-                    <i class="fas fa-search me-1"></i>Get Quote
-                </a>
-                <a href="/buy" class="btn btn-success me-2 mb-2">
-                    <i class="fas fa-shopping-cart me-1"></i>Buy Stocks
-                </a>
-                <a href="/sell" class="btn btn-warning me-2 mb-2">
-                    <i class="fas fa-money-bill-wave me-1"></i>Sell Stocks
-                </a>
-                <a href="/history" class="btn btn-info mb-2">
-                    <i class="fas fa-history me-1"></i>View History
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+    </table>
 
 {% endblock %}
