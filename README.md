@@ -1,55 +1,59 @@
-💸 Finance App (Demo Trading)
+# 💸 Finance App (Demo Trading)
 
-A full-stack demo trading web application that lets users simulate buying and selling stocks using virtual currency. The app provides live stock prices, portfolio tracking, and transaction history, making it a great tool to practice trading and understand the stock market — without risking real money.
+A full-stack **demo trading** web application that lets users simulate buying and selling stocks using **virtual currency**. The app provides **live stock prices**, **portfolio tracking**, and **transaction history**, making it a great tool to practice trading and understand the stock market — without risking real money.
 
-Built with Flask, HTML/CSS, SQLite3, and the Yahoo Finance API.
+Built with **Flask**, **HTML/CSS**, **SQLite3**, and the **Yahoo Finance API**.
 
-🚀 Features
+---
 
-📈 Live Global Stock Prices
-Get real-time stock quotes from markets around the world using Yahoo Finance API.
+## 🚀 Features
 
-💰 Demo Trading System
-Buy and sell stocks using virtual money. Great for beginners to learn without financial risk.
+- 📈 **Live Global Stock Prices**  
+  Get real-time stock quotes from markets around the world using Yahoo Finance API.
 
-🔐 User Authentication
-Secure login and registration system to manage individual portfolios.
+- 💰 **Demo Trading System**  
+  Buy and sell stocks using virtual money. Great for beginners to learn without financial risk.
 
-👤 Profile Management
-Each user has a personal profile that tracks their virtual funds, holdings, and activity.
+- 🔐 **User Authentication**  
+  Secure login and registration system to manage individual portfolios.
 
-📊 Portfolio Dashboard
-View current holdings, profit/loss status, and total portfolio value.
+- 👤 **Profile Management**  
+  Each user has a personal profile that tracks their virtual funds, holdings, and activity.
 
-🧾 Transaction History
-View all past buy/sell transactions with timestamps and price records.
+- 📊 **Portfolio Dashboard**  
+  View current holdings, profit/loss status, and total portfolio value.
 
-🎨 Custom Logo & Interface
-Polished UI with a custom logo and clean user experience.
+- 🧾 **Transaction History**  
+  View all past buy/sell transactions with timestamps and price records.
 
-🛠️ Tech Stack
-Technology	Role
-Flask (Python)	Backend server and routing
-HTML/CSS	Frontend structure and styling
-SQLite3	Lightweight database
-Yahoo Finance API	Real-time stock data integration
+- 🎨 **Custom Logo & Interface**  
+  Polished UI with a custom logo and clean user experience.
 
-🧠 Future Enhancements
+---
 
-Interactive graphs for stock trends
+## 🛠️ Tech Stack
 
-Dark mode support
+- **Flask (Python)** – Backend server and routing  
+- **HTML/CSS** – Frontend structure and styling  
+- **SQLite3** – Lightweight database  
+- **Yahoo Finance API** – Real-time stock data integration
 
-Leaderboard to compare portfolios
 
-Email verification or 2FA
 
-Real stock news integration
+## 🧠 Future Enhancements
 
-🙌 Acknowledgements
+- Interactive graphs for stock trends  
+- Dark mode support  
+- Leaderboard to compare portfolios  
+- Email verification or 2FA  
+- Real stock news integration  
 
-Yahoo Finance API
+---
 
-Flask Documentation
+## 🙌 Acknowledgements
 
-Inspired by CS50 Finance Project
+- [Yahoo Finance API](https://finance.yahoo.com/)  
+- [Flask Documentation](https://flask.palletsprojects.com/)  
+- Inspired by CS50 Finance Project
+
+---
