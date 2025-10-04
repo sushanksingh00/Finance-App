@@ -5,10 +5,152 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/quote">
-        <div class="mb-3">
-            <p>A share of {{ symbol }} is costs {{ price | usd }}</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div
+                  class="card shadow-sm"
+                  id="chartMeta"
+                  data-symbol="{{ symbol }}"
+                  data-default-range="{{ default_range | default('1mo') }}"
+                  data-currency-code="{{ currency_code }}"
+                  data-currency-symbol="{{ currency_symbol }}"
+                  data-fx-rate="{{ fx_rate | default(1.0) }}"
+                >
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <h5 class="card-title mb-0">{{ symbol }} Price</h5>
+                            <div class="text-muted">Current ({{ currency_code }}): <strong>{{ currency_symbol }}{{ display_price }}</strong></div>
+                        </div>
+
+                        <div class="btn-group mb-3" role="group" aria-label="Range selector">
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="1d">1D</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="5d">5D</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="1mo">1M</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="3mo">3M</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="6mo">6M</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="1y">1Y</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="5y">5Y</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="10y">10Y</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="ytd">YTD</button>
+                            <button type="button" class="btn btn-outline-primary range-btn" data-range="max">MAX</button>
+                        </div>
+
+                        <div class="position-relative" style="height: 360px;">
+                            <canvas id="priceChart"></canvas>
+                            <div id="chartLoading" class="position-absolute top-50 start-50 translate-middle text-muted" style="display:none;">Loading...</div>
+                            <div id="chartEmpty" class="position-absolute top-50 start-50 translate-middle text-muted" style="display:none;">No data available</div>
+                        </div>
+
+                        <div class="mt-3">
+                            <a href="/quote" class="btn btn-secondary">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit">OK</button>
-    </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        const metaEl = document.getElementById('chartMeta');
+        const stockSymbol = metaEl ? metaEl.dataset.symbol : '';
+        const defaultRange = metaEl ? (metaEl.dataset.defaultRange || '1mo') : '1mo';
+        const currencyCode = metaEl ? (metaEl.dataset.currencyCode || 'INR') : 'INR';
+        const currencySymbol = metaEl ? (metaEl.dataset.currencySymbol || '₹') : '₹';
+        const fxRate = metaEl ? parseFloat(metaEl.dataset.fxRate || '1') : 1;
+
+        const loading = document.getElementById('chartLoading');
+        const emptyMsg = document.getElementById('chartEmpty');
+        const ctx = document.getElementById('priceChart').getContext('2d');
+
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim() || '#0d6efd';
+        let chart;
+
+        function setActiveButton(range) {
+            document.querySelectorAll('.range-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.range === range);
+            });
+        }
+
+        function setEmptyState(show) {
+            emptyMsg.style.display = show ? 'block' : 'none';
+        }
+
+        async function fetchData(range) {
+            loading.style.display = 'block';
+            setEmptyState(false);
+            try {
+                const res = await fetch(`/quote/history?symbol=${encodeURIComponent(stockSymbol)}&range=${encodeURIComponent(range)}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to fetch');
+                return data;
+            } catch (err) {
+                console.error(err);
+                return { labels: [], closes: [] };
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function buildChart(labels, usdValues) {
+            const values = usdValues.map(v => Math.round(v * fxRate * 100) / 100);
+            if (!labels.length || !values.length) {
+                setEmptyState(true);
+            }
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, primaryColor + '33');
+            gradient.addColorStop(1, primaryColor + '00');
+
+            const config = {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: `${stockSymbol} Close (${currencyCode})`,
+                        data: values,
+                        borderColor: primaryColor,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.25,
+                        pointRadius: 0,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${currencySymbol}${ctx.parsed.y.toLocaleString()}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { maxTicksLimit: 8 }, grid: { display: false } },
+                        y: { ticks: { callback: (val) => `${currencySymbol}${Number(val).toLocaleString()}` }, grid: { color: '#eee' } }
+                    }
+                }
+            };
+
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, config);
+        }
+
+        async function load(range) {
+            setActiveButton(range);
+            const data = await fetchData(range);
+            buildChart(data.labels, data.closes);
+        }
+
+        document.querySelectorAll('.range-btn').forEach(btn => {
+            btn.addEventListener('click', () => load(btn.dataset.range));
+        });
+
+        if (stockSymbol) load(defaultRange);
+    </script>
 {% endblock %}

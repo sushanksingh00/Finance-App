@@ -20,22 +20,22 @@
             <tr>
                 <td>{{ row[1] }}</td>
                 <td>{{ row[4] }}</td>
-                <td>{{ row[2] | usd}}</td>
-                <td>{{ row[3] | usd}}</td>
+                <td>{{ (row[2] * fx_rate) | money }}</td>
+                <td>{{ (row[3] * fx_rate) | money }}</td>
             </tr>
         {% endfor %}
             <tr>
                 <td></td>
                 <td></td>
                 <td class='font-weight-bold'>Cash</td>
-                <td>{{ cash | usd }}</td>
+                <td>{{ (cash * fx_rate) | money }}</td>
             </tr>
 
             <tr>
                 <td></td>
                 <td></td>
                 <td class='font-weight-bold'>TOTAL</td>
-                <td>{{ total | usd}}</td>
+                <td>{{ (total * fx_rate) | money }}</td>
             </tr>
         </tbody>
 

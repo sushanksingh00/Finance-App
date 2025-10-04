@@ -1,23 +1,21 @@
 /* Size for brand */
-nav .navbar-brand
-{
+nav .navbar-brand {
     font-size: xx-large;
+    padding-top: 0.25rem; /* tighter vertical padding */
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;  /* reduce horizontal space */
+    padding-right: 0.5rem;
 }
 
-/* Colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
+/* Limit the brand logo to navbar height */
+nav .navbar-brand .brand-logo {
+    height: 26px; /* smaller logo to match other items */
+    width: auto;
+    display: block;
 }
-nav .navbar-brand .red
-{
-    color: #ea433b;
-}
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
-}
-nav .navbar-brand .green
-{
-    color: #2e944b;
-}
+
+/* Colors for brand (kept in case used elsewhere) */
+nav .navbar-brand .blue { color: #537fbe; }
+nav .navbar-brand .red { color: #ea433b; }
+nav .navbar-brand .yellow { color: #f5b82e; }
+nav .navbar-brand .green { color: #2e944b; }

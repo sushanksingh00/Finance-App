@@ -1,7 +1,7 @@
 import os
 #it is real
 import sqlite3
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 #return render_template("extra.html", name=rows)
@@ -24,6 +24,61 @@ Session(app)
 db = sqlite3.connect("finance.db", check_same_thread=False)
 
 c = db.cursor()
+
+# ---------------- Currency helpers -----------------
+CURRENCY_SYMBOLS = {"INR": "₹", "USD": "$", "EUR": "€"}
+
+def get_currency():
+    cur = session.get("currency")
+    if cur in ("INR", "USD", "EUR"):
+        return cur
+    session["currency"] = "INR"
+    return "INR"
+
+def get_currency_symbol(code: str) -> str:
+    return CURRENCY_SYMBOLS.get(code.upper(), "₹")
+
+def get_fx_rate_usd_to(target: str) -> float:
+    """Return FX rate to convert USD -> target (INR, USD, EUR). Fallback to 1.0."""
+    target = (target or "USD").upper()
+    if target == "USD":
+        return 1.0
+    try:
+        import yfinance as yf
+        if target == "INR":
+            pair = yf.Ticker("USDINR=X")
+            price = float(pair.history(period="1d")["Close"][-1])
+            return price if price > 0 else 1.0
+        if target == "EUR":
+            pair = yf.Ticker("EURUSD=X")
+            price = float(pair.history(period="1d")["Close"][-1])
+            return (1.0 / price) if price > 0 else 1.0
+    except Exception as e:
+        print(f"FX fetch error for {target}: {e}")
+    return {"INR": 83.0, "EUR": 0.90}.get(target, 1.0)
+
+def money(value: float) -> str:
+    """Format a numeric value with current currency symbol."""
+    try:
+        code = get_currency()
+        symbol = get_currency_symbol(code)
+        return f"{symbol}{float(value):,.2f}"
+    except Exception:
+        return f"{value}"
+
+app.jinja_env.filters["money"] = money
+
+@app.context_processor
+def inject_currency():
+    code = get_currency()
+    fx = get_fx_rate_usd_to(code)
+    return {
+        "currency_code": code,
+        "currency_symbol": get_currency_symbol(code),
+        "fx_rate": fx,
+    }
+# ---------------------------------------------------
+
 
 @app.after_request
 def after_request(response):
@@ -193,6 +248,17 @@ def logout():
     return redirect("/")
 
 
+# Set display currency
+@app.route("/set-currency", methods=["POST"])
+@login_required
+def set_currency():
+    cur = (request.form.get("currency") or "").upper()
+    if cur in ("INR", "USD", "EUR"):
+        session["currency"] = cur
+    ref = request.referrer or "/"
+    return redirect(ref)
+
+
 @app.route("/quote", methods=["GET", "POST"])
 @login_required
 def quote():
@@ -210,10 +276,67 @@ def quote():
         if not stock_quote:
             return apology("INVALID SYMBOL", 400)
         else:
-            return render_template("show_price.html", symbol=stock_quote['symbol'], price=stock_quote['price'])
+            code = get_currency()
+            fx = get_fx_rate_usd_to(code)
+            converted = round(float(stock_quote['price']) * fx, 2)
+            disp = f"{converted:,.2f}"
+            return render_template(
+                "show_price.html",
+                symbol=stock_quote['symbol'],
+                price_usd=stock_quote['price'],
+                display_price=disp,
+                currency_symbol=get_currency_symbol(code),
+                fx_rate=fx,
+                default_range="1mo",
+            )
 
     else:
         return render_template("quote.html")
+
+
+# Provide historical price data for charting on the quote page
+@app.route("/quote/history")
+@login_required
+def quote_history():
+    symbol = (request.args.get("symbol") or "").upper().strip()
+    period = (request.args.get("range") or "1mo").lower().strip()
+
+    if not symbol:
+        return jsonify({"error": "Missing symbol"}), 400
+
+    allowed_periods = {
+        "1d": "5m",
+        "5d": "15m",
+        "1mo": "1d",
+        "3mo": "1d",
+        "6mo": "1d",
+        "1y": "1d",
+        "5y": "1wk",
+        "10y": "1mo",
+        "ytd": "1d",
+        "max": "1mo",
+    }
+
+    if period not in allowed_periods:
+        period = "1mo"
+
+    interval = allowed_periods[period]
+
+    try:
+        import yfinance as yf
+        stock = yf.Ticker(symbol)
+        hist = stock.history(period=period, interval=interval)
+        # yfinance may return empty on invalid symbols or no data
+        if hist is None or hist.empty:
+            return jsonify({"error": "No data available"}), 404
+
+        labels = [idx.strftime("%Y-%m-%d %H:%M") for idx in hist.index]
+        closes = [round(float(v), 2) for v in hist["Close"].tolist()]
+        return jsonify({"labels": labels, "closes": closes})
+    except Exception as e:
+        # Log the error server-side if needed
+        print(f"History fetch error for {symbol} ({period}): {e}")
+        return jsonify({"error": "Failed to fetch data"}), 500
 
 
 @app.route("/register", methods=["GET", "POST"])

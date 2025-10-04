@@ -16,7 +16,7 @@
 
         <link href="/static/styles.css" rel="stylesheet">
 
-        <title>C$50 Finance: {% block title %}{% endblock %}</title>
+        <title>BullsBear Lab: {% block title %}{% endblock %}</title>
 
     </head>
 
@@ -24,7 +24,9 @@
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"><span class="blue">C</span><span class="red">$</span><span class="yellow">5</span><span class="green">0</span> <span class="red">Finance</span></a>
+                <a class="navbar-brand d-flex align-items-center" href="/">
+                    <img src="/static/logo.svg" alt="App Logo" class="brand-logo" style="object-fit: contain;"/>
+                </a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -36,7 +38,17 @@
                             <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
                             <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
                         </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
+                        <ul class="navbar-nav ms-auto mt-2 align-items-center gap-2">
+                            <li class="nav-item d-flex align-items-center text-muted small">
+                                <span class="me-2">Currency:</span>
+                                <form class="d-flex align-items-center" action="/set-currency" method="post">
+                                    <select name="currency" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="INR" {% if currency_code == 'INR' %}selected{% endif %}>INR (₹)</option>
+                                        <option value="USD" {% if currency_code == 'USD' %}selected{% endif %}>USD ($)</option>
+                                        <option value="EUR" {% if currency_code == 'EUR' %}selected{% endif %}>EUR (€)</option>
+                                    </select>
+                                </form>
+                            </li>
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
                     {% else %}
@@ -80,7 +92,7 @@
                     (document.doctype.publicId ? ' PUBLIC "' + document.doctype.publicId + '"' : '') +
                     (!document.doctype.publicId && document.doctype.systemId ? ' SYSTEM' : '') +
                     (document.doctype.systemId ? ' "' + document.doctype.systemId + '"' : '') +
-                    '>\n' + document.documentElement.outerHTML;
+                    '>' + '\n' + document.documentElement.outerHTML;
                     document.querySelector('form[action="https://validator.w3.org/check"] > input[name="fragment"]').value = html;
                 });
             </script>

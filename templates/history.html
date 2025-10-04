@@ -18,7 +18,7 @@
             <tr>
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
-                <td>{{ row[3] | usd }}</td>
+                <td>{{ (row[3] * fx_rate) | money }}</td>
                 <td>{{ row[4] }}</td>
             </tr>
         {% endfor %}
