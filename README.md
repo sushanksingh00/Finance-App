@@ -1,4 +1,4 @@
-# 💸 Finance App (Demo Trading)
+# 💸 BullsBear Lab (Demo Trading)
 
 A full-stack **demo trading** web application that lets users simulate buying and selling stocks using **virtual currency**. The app provides **live stock prices**, **portfolio tracking**, and **transaction history**, making it a great tool to practice trading and understand the stock market — without risking real money.
 
